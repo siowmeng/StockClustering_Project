@@ -147,8 +147,8 @@ def stockClustering(graph, k):
 #    return sorted(nx.connected_components(G))
     
 
-priceDF = pd.read_csv('D:\Imperial MSc\Data Structures and Algorithms\Homework\Group Project\SP_500_close_2015.csv')
-firmDF = pd.read_csv('D:\Imperial MSc\Data Structures and Algorithms\Homework\Group Project\SP_500_firms.csv')
+priceDF = pd.read_csv('SP_500_close_2015.csv')
+firmDF = pd.read_csv('SP_500_firms.csv')
 
 dailyReturn = stockReturns(priceDF)
 
@@ -158,7 +158,6 @@ cluster = stockClustering(corrGraph, 10)
 
 nx.draw_spectral(corrGraph)
 plt.show()
-
 
 
 

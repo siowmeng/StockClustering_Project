@@ -18,10 +18,10 @@ def extract_clusters(list_of_sets):
     extracted_sets = []
     
     for item in list_of_sets:
-            if len(item) > 1:
+            if len(item) > 1:   # extract all sets that have more than one element
                 extracted_sets.append(item)
     
-    return(extracted_sets)
+    return extracted_sets
     
    
    
@@ -41,6 +41,8 @@ def mean_of_list(list):
     return mean
     
     
+    
+    
 def name_columns(dataframe):
     '''
     input: takes dataframe with average means and returns of clusters as input
@@ -58,6 +60,7 @@ def name_columns(dataframe):
     
     
     
+    
 def evaluate_clusters(list_of_sets):
     '''
     input: uses a list of clusters
@@ -65,33 +68,33 @@ def evaluate_clusters(list_of_sets):
     
     '''
     
-    dframe = pd.DataFrame()
+    dframe = pd.DataFrame()   # initialize empty dataframe
     
-    count = 0
+    count = 0   # used to populate columns of dataframe
     
-    mean_dframe = dailyReturns.mean()
-    sd_frame = dailyReturns.std()
+    mean_dframe = dailyReturns.mean()   # creates a dataframe with expected returns for all stocks
+    sd_frame = dailyReturns.std()   # creates a dataframe with starndard deviations for all stocks
     
     for set in list_of_sets:
         
-        iterable_set = list(set)
+        iterable_set = list(set)   # turns tuple into list to be able to iterate over it
         
-        mean = []
-        sd = []        
+        mean = []   # list of expected returns for a given cluster
+        sd = []   # list of standard deviations for a given cluster
         
         for stock in iterable_set:
             mean.append(mean_dframe[stock])
             sd.append(sd_frame[stock])
         
-        mean_set = mean_of_list(mean)
-        sd_set = mean_of_list(sd)
+        mean_cluster = mean_of_list(mean)   #
+        sd_cluster = mean_of_list(sd)
         
-        dframe[count] = [mean_set, sd_set]
+        dframe[count] = [mean_cluster, sd_cluster]
         
         count += 1
         
     dframe.index = ['Average Return', 'Average Risk']
-    name_columns(dframe)
+    name_columns(dframe)   # gives each column the appropriate name (Cluster 1, Cluster 2,...)
         
     return dframe
         

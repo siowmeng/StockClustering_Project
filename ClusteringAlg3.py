@@ -26,13 +26,12 @@ def ClusteringAlg3(ordered_list, k = 5):
     '''
     ##Creating a new list, so that it can be popped without updating the original.
     ord_list = list(ordered_list)
+    ##Creating a set of firms that are in the ordered list, in either position
+    ##(source or destination)
     firm_set = set()
     for i in range(len(ord_list)):
-        if not({ord_list[i][1]} in firm_set):
             firm_set.add(ord_list[i][1])
-        if not({ord_list[i][2]} in firm_set):
             firm_set.add(ord_list[i][2])
-            
     ##change the firm_set into a dictionary which has
     ##a key - which is the firm name
     ##a list - including
@@ -48,11 +47,6 @@ def ClusteringAlg3(ordered_list, k = 5):
         
         #take an item from the ordered list
         coritem = ord_list.pop(0)
-        
-        ##error handling - check that both the source and destination
-        ##elements are in the list of firms
-        if(coritem[1] not in firm_set or coritem[2] not in firm_set):
-            return("The ordered list must contain elements from the set")
         
         ##check if the firms are already in the same "set"
         ##i.e. have the same bottom node

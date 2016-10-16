@@ -61,7 +61,6 @@ def calCorrelations(dailyReturn):
     G.add_nodes_from(col.values)
         
     n = len(dailyReturn)
-    k = 0
     for i in range(0, ncol):
         for j in range(i + 1, ncol):
             x = dailyReturn[col[i]]
@@ -71,7 +70,6 @@ def calCorrelations(dailyReturn):
             corrMat[i][j] = (n * sum(x * y) - xsum * ysum) / (np.sqrt(n * sum(x**2) - xsum**2) * np.sqrt(n * sum(y**2) - ysum**2))
             corrMat[j][i] = corrMat[i][j]
             G.add_edge(col[i], col[j], weight = corrMat[i][j])
-        k += 1
         
     return pd.DataFrame(data = corrMat, index = col, columns = col), G
     
@@ -80,8 +78,7 @@ def calCorrelations(dailyReturn):
 #    ncol = len(col)
 #    corrMat = np.zeros([ncol, ncol])
 #        
-#    n = len(dailyReturn)     
-#    k = 0
+#    n = len(dailyReturn)
 #    for i in range(0, ncol):
 #        for j in range(i, ncol):
 #            x = dailyReturn[col[i]]
@@ -89,7 +86,6 @@ def calCorrelations(dailyReturn):
 #            xsum = sum(x)
 #            ysum = sum(y)
 #            corrMat[i][j] = (n * sum(x * y) - xsum * ysum) / (np.sqrt(n * sum(x**2) - xsum**2) * np.sqrt(n * sum(y**2) - ysum**2))
-#        k += 1
 #        
 #    return pd.DataFrame(data = corrMat, index = col, columns = col)
     
@@ -154,11 +150,10 @@ dailyReturn = stockReturns(priceDF)
 
 corr, corrGraph = calCorrelations(dailyReturn)
 
-cluster = stockClustering(corrGraph, 10)
+cluster = stockClustering(corrGraph, 122761)
 
 nx.draw_spectral(corrGraph)
 plt.show()
 
-
-
+# Clustering algorithm to call: Hierachical (Agglomerative) & K-Means
 

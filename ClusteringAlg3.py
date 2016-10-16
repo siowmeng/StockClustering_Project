@@ -4,7 +4,7 @@ Created on Fri Oct 14 08:50:11 2016
 
 @author: louisefallon
 """
-import NodeandClusterHelpers as nh
+import ClusteringAlg3Helpers as nh
 
 #%%
 # Create the function that performs the clustering algorithm

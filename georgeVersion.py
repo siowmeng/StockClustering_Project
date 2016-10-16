@@ -100,7 +100,6 @@ def clusteringAlg(ord_list, k = 0):
         if idx1 != idx2:
             sets[idx1] = sets[idx1].union(sets[idx2])
             sets.remove(sets[idx2])
-        print(len(sets))
     # Return the final list of sets
     return sets
 

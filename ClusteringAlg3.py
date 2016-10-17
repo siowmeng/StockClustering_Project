@@ -8,7 +8,7 @@ import ClusteringAlg3Helpers as nh
 
 #%%
 # Create the function that performs the clustering algorithm
-def ClusteringAlg3(firm_set, ord_list, k = 5):
+def ClusteringAlg3(ordered_list, k = 5):
     '''
     Description:
         - Clusters the firm_set, based on k iterations of a clustering algorithm
@@ -24,13 +24,20 @@ def ClusteringAlg3(firm_set, ord_list, k = 5):
     Output:
         - A list of sets (clusters), the sets contain strings of firm names.
     '''
-    
+    ##Creating a new list, so that it can be popped without updating the original.
+    ord_list = list(ordered_list)
+    ##Creating a set of firms that are in the ordered list, in either position
+    ##(source or destination)
+    firm_set = set()
+    for i in range(len(ord_list)):
+            firm_set.add(ord_list[i][1])
+            firm_set.add(ord_list[i][2])
     ##change the firm_set into a dictionary which has
     ##a key - which is the firm name
     ##a list - including
     ##    a "prev" firm name
     ##    and a "next" firm name
-    firmdict = {}
+    firmdict = dict()
     for firm in firm_set:
         firmdict[firm] = [firm, firm]
     setOfStartNodes = set(firm_set)
@@ -40,11 +47,6 @@ def ClusteringAlg3(firm_set, ord_list, k = 5):
         
         #take an item from the ordered list
         coritem = ord_list.pop(0)
-        
-        ##error handling - check that both the source and destination
-        ##elements are in the list of firms
-        if(coritem[1] not in firm_set or coritem[2] not in firm_set):
-            return("The ordered list must contain elements from the set")
         
         ##check if the firms are already in the same "set"
         ##i.e. have the same bottom node

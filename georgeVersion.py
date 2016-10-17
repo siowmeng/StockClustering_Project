@@ -10,10 +10,10 @@ import pandas as pd # for dataframes manipulation
 import matplotlib.pyplot as plt
 
 # Change the working directory
-#os.chdir('C:/Users/user/..')
+os.chdir('C:/Users/user/Dropbox (Personal)/Imperial College Business School/MSc Business Analytics/Autumn Term/Data Structures and Algorithms/Group Project/StockClustering_Project')
 
 
-def stockReturns(cl_p, date = True):
+def stockReturns(cl_p):
     """
     Input:  
     cl_p: A dataframe that contains the prices of the stocks
@@ -23,12 +23,9 @@ def stockReturns(cl_p, date = True):
     A dataframe with the daily returns of the stocks - same number of
     columns as the input vector and one row less than the input vector
     """    
-    if date:
-        d_ret = pd.DataFrame(cl_p.iloc[1:, 0], columns=['Date'])
-        j = 1
-    else:
-        d_ret = pd.DataFrame()
-        j = 0
+    
+    d_ret = pd.DataFrame()
+    j = 0
     for i in range(j, cl_p.shape[1]):
         d_ret[cl_p.columns[i]] = (cl_p.iloc[1:,i].values - cl_p.iloc[:-1,i].values) / cl_p.iloc[:-1,i].values
     return d_ret
@@ -103,7 +100,6 @@ def clusteringAlg(ord_list, k = 0):
         if idx1 != idx2:
             sets[idx1] = sets[idx1].union(sets[idx2])
             sets.remove(sets[idx2])
-        print(len(sets))
     # Return the final list of sets
     return sets
 

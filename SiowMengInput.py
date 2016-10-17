@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
 
 def stockReturns(priceDF):
     
@@ -61,6 +63,7 @@ def calCorrelations(dailyReturn):
     G.add_nodes_from(col.values)
         
     n = len(dailyReturn)
+    k = 0
     for i in range(0, ncol):
         for j in range(i + 1, ncol):
             x = dailyReturn[col[i]]
@@ -70,6 +73,7 @@ def calCorrelations(dailyReturn):
             corrMat[i][j] = (n * sum(x * y) - xsum * ysum) / (np.sqrt(n * sum(x**2) - xsum**2) * np.sqrt(n * sum(y**2) - ysum**2))
             corrMat[j][i] = corrMat[i][j]
             G.add_edge(col[i], col[j], weight = corrMat[i][j])
+        k += 1
         
     return pd.DataFrame(data = corrMat, index = col, columns = col), G
     
@@ -78,7 +82,8 @@ def calCorrelations(dailyReturn):
 #    ncol = len(col)
 #    corrMat = np.zeros([ncol, ncol])
 #        
-#    n = len(dailyReturn)
+#    n = len(dailyReturn)     
+#    k = 0
 #    for i in range(0, ncol):
 #        for j in range(i, ncol):
 #            x = dailyReturn[col[i]]
@@ -86,6 +91,7 @@ def calCorrelations(dailyReturn):
 #            xsum = sum(x)
 #            ysum = sum(y)
 #            corrMat[i][j] = (n * sum(x * y) - xsum * ysum) / (np.sqrt(n * sum(x**2) - xsum**2) * np.sqrt(n * sum(y**2) - ysum**2))
+#        k += 1
 #        
 #    return pd.DataFrame(data = corrMat, index = col, columns = col)
     
@@ -141,23 +147,8 @@ def stockClustering(graph, k):
 #        G.add_edge(a, b)
 #        
 #    return sorted(nx.connected_components(G))
-    
 
-priceDF = pd.read_csv('SP_500_close_2015.csv')
-firmDF = pd.read_csv('SP_500_firms.csv')
-
-dailyReturn = stockReturns(priceDF)
-
-corrDF, corrGraph = calCorrelations(dailyReturn)
-
-cluster = stockClustering(corrGraph, 10000)
-
-#nx.draw_spectral(corrGraph)
-#plt.show()
-
-# Clustering algorithm to call: Hierachical (Agglomerative) & K-Means
-from sklearn.cluster import KMeans
-
+# KMeans Clustering Algorithm
 def stockClusteringKMeans(dailyReturn, num_clusters):
     # Using daily closing price for K-Means
     compTickers = dailyReturn.columns
@@ -188,10 +179,7 @@ def stockClusteringKMeans(dailyReturn, num_clusters):
 #        
 #    return resultSets
 
-clusterKMeans = stockClusteringKMeans(dailyReturn, len(cluster))
-
-from sklearn.cluster import AgglomerativeClustering
-
+# Hierachical (Agglomerative) Clustering with Average Linkage
 def stockClusteringAgglomerative(corrDF, num_clusters):
     compTickers = corrDF.columns
     # Transform correlation matrix into distance matrix
@@ -207,5 +195,4 @@ def stockClusteringAgglomerative(corrDF, num_clusters):
         i += 1
         
     return resultSets
-    
-clusterAggAveLinkage = stockClusteringAgglomerative(corrDF, len(cluster))
+

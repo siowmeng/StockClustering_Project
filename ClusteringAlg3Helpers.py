@@ -46,7 +46,7 @@ def findTopNode(input_firm, firmDict):
         return input_firm
     else:
         return(findTopNode(firmDict[input_firm][0],firmDict))
-        
+
 def ReturnClusters(firmdict, setOfStartNodes):
     '''
     Description:
@@ -64,12 +64,13 @@ def ReturnClusters(firmdict, setOfStartNodes):
         - A list of sets (clusters), the sets contain strings of firm names.
     '''
     startnodes = set(setOfStartNodes)
-    listoflists = []
+    listofsets = []
     while (len(startnodes) != 0):
         currentnode = startnodes.pop()
-        currentlist = [currentnode]
+        currentset = set()
+        currentset.add(currentnode)
         while (firmdict[currentnode][1] != currentnode):
             currentnode = firmdict[currentnode][1]
-            currentlist.append(currentnode)
-        listoflists.append(currentlist)
-    return listoflists
+            currentset.add(currentnode)
+        listofsets.append(currentset)
+    return listofsets

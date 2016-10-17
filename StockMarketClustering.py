@@ -145,13 +145,13 @@ def stockClustering(graph, k):
     
 
 priceDF = pd.read_csv('SP_500_close_2015.csv')
-firmDF = pd.read_csv('SP_500_firms.csv')
+firmDF = pd.read_csv('SP_500_firms.csv', index_col = 0)
 
 dailyReturn = stockReturns(priceDF)
 
 corrDF, corrGraph = calCorrelations(dailyReturn)
 
-cluster = stockClustering(corrGraph, 10000)
+cluster = stockClustering(corrGraph, 1000)
 
 #nx.draw_spectral(corrGraph)
 #plt.show()
@@ -210,3 +210,13 @@ def stockClusteringAgglomerative(corrDF, num_clusters):
     return resultSets
     
 clusterAggAveLinkage = stockClusteringAgglomerative(corrDF, len(cluster))
+
+def getStockDetails(ticker, clusterSets, firmDF):
+    
+    # if the ticker given is in a single set cluster
+    if {ticker} in clusterSets:
+        return firmDF.loc[ticker, :]
+    else:
+        for i in range(len(clusterSets)):
+            if ticker in clusterSets[i]:
+                return firmDF.loc[clusterSets[i], :].sort_values(['Sector', 'Name'])

@@ -197,3 +197,13 @@ def stockClusteringAgglomerative(corrDF, num_clusters):
         
     return resultSets
 
+def getStockDetails(ticker, clusterSets, firmDF):
+    
+    # if the ticker given is in a single set cluster
+    if {ticker} in clusterSets:
+        return firmDF.loc[ticker, :]
+    else:
+        for i in range(len(clusterSets)):
+            if ticker in clusterSets[i]:
+                return firmDF.loc[clusterSets[i], :]
+

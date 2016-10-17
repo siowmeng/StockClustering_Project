@@ -205,5 +205,5 @@ def getStockDetails(ticker, clusterSets, firmDF):
     else:
         for i in range(len(clusterSets)):
             if ticker in clusterSets[i]:
-                return firmDF.loc[clusterSets[i], :]
+                return firmDF.loc[clusterSets[i], :].sort('Sector')
 

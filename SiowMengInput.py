@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
 
 def stockReturns(priceDF):
     
@@ -146,5 +148,51 @@ def stockClustering(graph, k):
 #        
 #    return sorted(nx.connected_components(G))
 
+# KMeans Clustering Algorithm
+def stockClusteringKMeans(dailyReturn, num_clusters):
+    # Using daily closing price for K-Means
+    compTickers = dailyReturn.columns
+    dailyReturnArray = dailyReturn.as_matrix().transpose()
+    kmeans = KMeans(n_clusters = num_clusters, random_state = 0).fit(dailyReturnArray)
+    
+    resultSets = [set()] * num_clusters
+    i = 0
+    
+    for l in kmeans.labels_:
+        resultSets[l] = resultSets[l].union({compTickers[i]})
+        i += 1
+    
+    return resultSets
+    
+    # Using standard deviation of each company for K-Means
+#    stdDev = dailyReturn.std(axis = 0)
+#    compTickers = stdDev.index
+#    stdDevArray = np.reshape(stdDev.as_matrix(), (len(stdDev), 1))
+#    kmeans = KMeans(n_clusters = num_clusters, random_state = 0).fit(stdDevArray)
+#    
+#    resultSets = [set()] * num_clusters
+#    i = 0
+#    
+#    for l in kmeans.labels_:
+#        resultSets[l] = resultSets[l].union({compTickers[i]})
+#        i += 1
+#        
+#    return resultSets
 
+# Hierachical (Agglomerative) Clustering with Average Linkage
+def stockClusteringAgglomerative(corrDF, num_clusters):
+    compTickers = corrDF.columns
+    # Transform correlation matrix into distance matrix
+    affinityMatrix = abs(corrDF.as_matrix() - 1)
+    model = AgglomerativeClustering(linkage = 'average', affinity = 'precomputed', n_clusters = num_clusters)
+    aggFit = model.fit(affinityMatrix)
+    
+    resultSets = [set()] * num_clusters
+    i = 0
+    
+    for l in aggFit.labels_:
+        resultSets[l] = resultSets[l].union({compTickers[i]})
+        i += 1
+        
+    return resultSets
 

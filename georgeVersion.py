@@ -134,8 +134,16 @@ def plotSetPrices(cl_p, sets):
     df.plot();
 
 
-
-
+def companyTracker(corList, company, ks, kf, kint):
+    kValues = np.arange(ks, kf, kint)
+    sets = []
+    for k in kValues:
+        clusters = clusteringAlg(corList, k)[0]
+        for i in range(len(clusters)):
+            if company in clusters[i]:
+                sets.append(clusters[i])
+                
+    return pd.Series(sets, index = kValues)
 
 
 

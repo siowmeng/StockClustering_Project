@@ -117,20 +117,21 @@ def calCorrelations(dailyReturn):
 def stockClustering(graph, k):
             
     # Method 1: Clustering using dictionary and list
-    sortedEdges = sorted(graph.edges(data = True), key = lambda edge: edge[2]['weight'], reverse = True)
+    sortedEdges = sorted(graph.edges(data = True), key = lambda edge: edge[2]['weight'], reverse = True) # O(e log e), e = number of edges = n(n - 1)/2 for dense graph
     
     listSets = dict()    
-    for node in graph.nodes():
+    for node in graph.nodes(): # O(n), n = number of companies
         listSets[node] = {node}
         
-    for i in range(0, k):
+    for i in range(0, k): # Execute k times
         (a, b, data) = sortedEdges[i]
-        mergedSet = listSets[a].union(listSets[b])
-        for node in mergedSet:
+        mergedSet = listSets[a].union(listSets[b]) # O(len(set(a)) + len(set(b))) = O(n) in worst case since the biggest possible set is the set with all n companies
+        for node in mergedSet: # O(n)
             listSets[node] = mergedSet
+    # The whole chunk above is O(kn + kn) = O(kn)
             
     resultSets = []
-    for nodeSet in listSets.values():
+    for nodeSet in listSets.values(): # O(n)
         if nodeSet not in resultSets:
             resultSets.append(nodeSet)
         

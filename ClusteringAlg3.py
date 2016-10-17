@@ -29,7 +29,7 @@ def ClusteringAlg3(ordered_list, k = 5):
     ##Creating a set of firms that are in the ordered list, in either position
     ##(source or destination)
     firm_set = set()
-    for i in range(len(ord_list)):
+    for i in range(len(ord_list)): # O(n^2), n = number of companies
             firm_set.add(ord_list[i][1])
             firm_set.add(ord_list[i][2])
     ##change the firm_set into a dictionary which has
@@ -38,26 +38,26 @@ def ClusteringAlg3(ordered_list, k = 5):
     ##    a "prev" firm name
     ##    and a "next" firm name
     firmdict = dict()
-    for firm in firm_set:
+    for firm in firm_set: # O(n)
         firmdict[firm] = [firm, firm]
     setOfStartNodes = set(firm_set)
     
     ##complete the loop k times
-    for i in range(0,k):
+    for i in range(0,k): #O(k)
         
         #take an item from the ordered list
-        coritem = ord_list.pop(0)
+        coritem = ord_list.pop(0) # O(n^2) for removing and reindexing the first element
         
         ##check if the firms are already in the same "set"
         ##i.e. have the same bottom node
-        lastnodefromsource = nh.findBottomNode(coritem[1],firmdict)
-        lastnodefromdest = nh.findBottomNode(coritem[2],firmdict)
+        lastnodefromsource = nh.findBottomNode(coritem[1],firmdict) # O(n), worst case = the path contains all companies
+        lastnodefromdest = nh.findBottomNode(coritem[2],firmdict) # O(n), worst case = the path contains all companies
         if (lastnodefromsource == lastnodefromdest):
             pass
         
         else:
         ## Otherwise, get the top node of the destination
-            firstnodefromdest = nh.findTopNode(coritem[2],firmdict)
+            firstnodefromdest = nh.findTopNode(coritem[2],firmdict) # O(n), worst case = the path contains all companies
         ## set the bottom node of the source to have a
         ## "next" pointer to the top node of the destination       
             firmdict[lastnodefromsource][1] = firstnodefromdest
@@ -68,7 +68,7 @@ def ClusteringAlg3(ordered_list, k = 5):
             firmdict[firstnodefromdest][0] = lastnodefromsource
         ## Remove the start node of the destination from start nodes
         ## as it now has a previous node, and is not a start.
-            setOfStartNodes.remove(firstnodefromdest)
+            setOfStartNodes.remove(firstnodefromdest) #O(n)
 
     return (nh.ReturnClusters(firmdict, setOfStartNodes))
     

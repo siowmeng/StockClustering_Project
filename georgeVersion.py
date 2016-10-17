@@ -76,7 +76,7 @@ def clusteringAlg(ord_list, k = 0):
     # Initialize the list of sets. Each set represents a cluster
     # which initialy includes only one firm
     sets = []
-    for i in range(len(ord_list)):
+    for i in range(len(ord_list)): #O(n^2), n = number of companies
         if not({ord_list[i][1]} in sets):
             sets.append({ord_list[i][1]})
         if not({ord_list[i][2]} in sets):
@@ -86,11 +86,11 @@ def clusteringAlg(ord_list, k = 0):
     # In each iteration we check the k-th tuple of correlations list
     # and whether the 2 firms in that tuple are already in the same
     # set. If they do, we move on to the next tuple, otherwise we merge
-    for j in range(min(k, len(ord_list))):
+    for j in range(min(k, len(ord_list))): #O(k) or O(n^2), depends on which is larger
         nd1 = ord_list[j][1]
         nd2 = ord_list[j][2]
         fl1, fl2 = False, False    
-        for i in range(len(sets)):
+        for i in range(len(sets)): # O(n)
             if (nd1 in sets[i]) and fl1 == False:
                 idx1 = i
                 fl1 = True
@@ -98,10 +98,11 @@ def clusteringAlg(ord_list, k = 0):
                 idx2 = i
                 fl2 = True
         if idx1 != idx2:
-            sets[idx1] = sets[idx1].union(sets[idx2])
-            sets.remove(sets[idx2])
+            sets[idx1] = sets[idx1].union(sets[idx2]) # O(len(set(a)) + len(set(b))) = O(n) in worst case since the biggest possible set is the set with all n companies
+            sets.remove(sets[idx2]) # O(n)
     # Return the final list of sets
     return sets
+    # The above code chunks time-complexity = either O(kn) or O(n^3)
 
 
 def findCor(cl_p, f1, f2):
